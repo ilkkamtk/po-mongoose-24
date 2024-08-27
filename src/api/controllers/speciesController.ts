@@ -40,4 +40,68 @@ const getSpecies = async (
   }
 };
 
-export {postSpecies, getSpecies};
+const getSingleSpecies = async (
+  req: Request<{id: string}>,
+  res: Response<Species>,
+  next: NextFunction,
+) => {
+  try {
+    const species = await SpeciesModel.findById(req.params.id);
+
+    if (!species) {
+      throw new CustomError('Species not found', 404);
+    }
+
+    res.json(species);
+  } catch (error) {
+    next(new CustomError((error as Error).message, 500));
+  }
+};
+
+const putSpecies = async (
+  req: Request<{id: string}, {}, Species>,
+  res: Response<DBMessageResponse>,
+  next: NextFunction,
+) => {
+  try {
+    const updatedSpecies = await SpeciesModel.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      {new: true},
+    );
+
+    if (!updatedSpecies) {
+      throw new CustomError('Species not found', 404);
+    }
+
+    res.json({
+      message: 'Species updated',
+      data: updatedSpecies,
+    });
+  } catch (error) {
+    next(new CustomError((error as Error).message, 500));
+  }
+};
+
+const deleteSpecies = async (
+  req: Request<{id: string}>,
+  res: Response<DBMessageResponse>,
+  next: NextFunction,
+) => {
+  try {
+    const deletedSpecies = await SpeciesModel.findByIdAndDelete(req.params.id);
+
+    if (!deletedSpecies) {
+      throw new CustomError('Species not found', 404);
+    }
+
+    res.json({
+      message: 'Species deleted',
+      data: deletedSpecies,
+    });
+  } catch (error) {
+    next(new CustomError((error as Error).message, 500));
+  }
+};
+
+export {postSpecies, getSpecies, getSingleSpecies, putSpecies, deleteSpecies};
