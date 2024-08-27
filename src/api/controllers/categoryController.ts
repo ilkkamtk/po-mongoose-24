@@ -17,7 +17,7 @@ const postCategory = async (
     const newCategory = new CategoryModel(req.body);
     const savedCategory = await newCategory.save();
 
-    res.json({
+    res.status(201).json({
       message: 'Category created',
       data: savedCategory,
     });
