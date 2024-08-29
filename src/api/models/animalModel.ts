@@ -39,7 +39,6 @@ animalSchema.statics.findBySpecies = function (
         as: 'species',
       },
     },
-    {$unwind: '$species'},
     {
       $lookup: {
         from: 'categories',
@@ -48,7 +47,6 @@ animalSchema.statics.findBySpecies = function (
         as: 'species.category',
       },
     },
-    {$unwind: '$species.category'},
     {
       $match: {
         'species.species_name': species_name,
