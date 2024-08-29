@@ -26,6 +26,7 @@ const speciesSchema = new Schema<Species>({
     coordinates: {
       type: [Number],
       required: true,
+      index: '2dsphere',
     },
   },
 });
